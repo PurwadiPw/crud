@@ -5,7 +5,7 @@ Raja Ongkir API Wrapper for Laravel 5
 
 ### Composer
 
-	composer require rifkyekayama/rajaongkir-laravel
+	composer require pw/laraongkir
 
 Untuk melakukan konfigurasi Api Key dan Jenis Akun, ketikan pada Terminal perintah sebagai berikut.
 
