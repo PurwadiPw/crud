@@ -1,15 +1,16 @@
 <?php
 
-namespace Pw\RajaOngkir;
+namespace Pw\RajaOngkir\Facades;
 
-use Illuminate\Support\Facades\Facade;
+use Illuminate\Support\Facades\Facade as IlluminateFacade;
+// use Pw\RajaOngkir\RajaOngkir as RajaOngkirClass;
 
 /**
- * @see \Pw\RajaOngkir\RajaOngkirFacade
+ * @see \Pw\RajaOngkir\RajaOngkir
  *
  * @author Purwadi <purwadie97@gmail.com>
  */
-class RajaOngkirFacade extends Facade
+class RajaOngkir extends IlluminateFacade
 {
 
     /**

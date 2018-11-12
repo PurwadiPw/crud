@@ -1,6 +1,6 @@
 <?php
 
-namespace Pw\RajaOngkir;
+namespace Pw\RajaOngkir\Helpers;
 
 /**
  * RajaOngkir REST Client

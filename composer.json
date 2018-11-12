@@ -29,7 +29,7 @@
                 "Pw\\RajaOngkir\\RajaOngkirServiceProvider"
             ],
             "aliases": {
-                "RajaOngkir": "Pw\\RajaOngkir\\RajaOngkirFacade"
+                "RajaOngkir": "Pw\\RajaOngkir\\Facades\\RajaOngkir"
             }
         }
     },

@@ -2,22 +2,25 @@
 
 namespace Pw\RajaOngkir;
 
+use Pw\RajaOngkir\Contracts\RajaOngkirFactory;
+use Pw\RajaOngkir\Helpers\RESTClient;
+
 /**
  * RajaOngkir Endpoints
  *
  * @auZthor Purwadi <purwadie97@gmail.com>
  */
 
-class Endpoints
+class RajaOngkir implements RajaOngkirFactory
 {
 
-    private $api_key;
-    private $account_type;
+    private static $api_key;
+    private static $account_type;
 
     public function __construct($api_key, $account_type)
     {
-        $this->api_key = $api_key;
-        $this->account_type = $account_type;
+        self::$api_key = $api_key;
+        self::$account_type = $account_type;
     }
 
     /**
@@ -25,10 +28,10 @@ class Endpoints
      * @param integer $province_id ID propinsi, jika NULL tampilkan semua propinsi
      * @return string Response dari cURL, berupa string JSON balasan dari RajaOngkir
      */
-    public function province($province_id = null)
+    public static function province($province_id = null)
     {
         $params = (is_null($province_id)) ? array() : array('id' => $province_id);
-        $rest_client = new RESTClient($this->api_key, 'province', $this->account_type);
+        $rest_client = new RESTClient(self::$api_key, 'province', self::$account_type);
         return $rest_client->get($params);
     }
 
@@ -38,13 +41,13 @@ class Endpoints
      * @param integer $city_id ID kota, jika ID propinsi dan kota NULL maka tampilkan semua kota
      * @return string Response dari cURL, berupa string JSON balasan dari RajaOngkir
      */
-    public function city($province_id = null, $city_id = null)
+    public static function city($province_id = null, $city_id = null)
     {
         $params = (is_null($province_id)) ? array() : array('province' => $province_id);
         if (!is_null($city_id)) {
             $params['id'] = $city_id;
         }
-        $rest_client = new RESTClient($this->api_key, 'city', $this->account_type);
+        $rest_client = new RESTClient(self::$api_key, 'city', self::$account_type);
         return $rest_client->get($params);
     }
 
@@ -54,13 +57,13 @@ class Endpoints
      * @param integer @subdistrict_id ID kecamatan, jika ID kecamatan NULL maka tampilkan semua kecamatan di kota tersebut
      * @return string Response dari cURL berupa string JSON balasan dari RajaOngkir
      */
-    public function subdistrict($city_id = null, $subdistrict_id = null)
+    public static function subdistrict($city_id = null, $subdistrict_id = null)
     {
         $params = array('city' => $city_id);
         if (!is_null($subdistrict_id)) {
             $params['id'] = $subdistrict_id;
         }
-        $rest_client = new RESTClient($this->api_key, 'subdistrict', $this->account_type);
+        $rest_client = new RESTClient(self::$api_key, 'subdistrict', self::$account_type);
         return $rest_client->get($params);
     }
 
@@ -74,7 +77,7 @@ class Endpoints
      * @param string $courier Kode kurir
      * @return string Response dari cURL, berupa string JSON balasan dari RajaOngkir
      */
-    public function cost($origin, $originType, $destination, $destinationType, $weight, $courier)
+    public static function cost($origin, $originType, $destination, $destinationType, $weight, $courier)
     {
         $params = array(
             'origin' => $origin,
@@ -84,7 +87,7 @@ class Endpoints
             'weight' => $weight,
             'courier' => $courier,
         );
-        $rest_client = new RESTClient($this->api_key, 'cost', $this->account_type);
+        $rest_client = new RESTClient(self::$api_key, 'cost', self::$account_type);
         return $rest_client->post($params);
     }
 
@@ -95,13 +98,13 @@ class Endpoints
      * @param integer $city_id ID kota, jika ID propinsi dan ID kota NULL maka tampilkan semua kota
      * @return string Response dari cURL, berupa string JSON balasan dari RajaOngkir
      */
-    public function internationalOrigin($province_id = null, $city_id = null)
+    public static function internationalOrigin($province_id = null, $city_id = null)
     {
         $params = (is_null($province_id)) ? array() : array('province' => $province_id);
         if (!is_null($city_id)) {
             $params['id'] = $city_id;
         }
-        $rest_client = new RESTClient($this->api_key, 'internationalOrigin', $this->account_type);
+        $rest_client = new RESTClient(self::$api_key, 'internationalOrigin', self::$account_type);
         return $rest_client->get($params);
     }
 
@@ -111,10 +114,10 @@ class Endpoints
      * @param integer ID negara, jika kosong maka akan menampilkan semua negara
      * @return string Response dari cURL, berupa string JSON balasan dari RajaOngkir
      */
-    public function internationalDestination($country_id = null)
+    public static function internationalDestination($country_id = null)
     {
         $params = (is_null($country_id)) ? array() : array('id' => $country_id);
-        $rest_client = new RESTClient($this->api_key, 'internationalDestination', $this->account_type);
+        $rest_client = new RESTClient(self::$api_key, 'internationalDestination', self::$account_type);
         return $rest_client->get($params);
     }
 
@@ -127,7 +130,7 @@ class Endpoints
      * @param string Kode kurir
      * @return string Response dari cURL, berupa string JSON balasan dari RajaOngkir
      */
-    public function internationalCost($origin, $destination, $weight, $courier)
+    public static function internationalCost($origin, $destination, $weight, $courier)
     {
         $params = array(
             'origin' => $origin,
@@ -135,7 +138,7 @@ class Endpoints
             'weight' => $weight,
             'courier' => $courier,
         );
-        $rest_client = new RESTClient($this->api_key, 'internationalCost', $this->account_type);
+        $rest_client = new RESTClient(self::$api_key, 'internationalCost', self::$account_type);
         return $rest_client->post($params);
     }
 
@@ -144,9 +147,9 @@ class Endpoints
      *
      * @return string Response dari cURL, berupa string JSON balasan dari RajaOngkir
      */
-    public function currency()
+    public static function currency()
     {
-        $rest_client = new RESTClient($this->api_key, 'currency', $this->account_type);
+        $rest_client = new RESTClient(self::$api_key, 'currency', self::$account_type);
         return $rest_client->get(array());
     }
 
@@ -157,13 +160,13 @@ class Endpoints
      * @param string Kode kurir
      * @return string Response dari cURL, berupa string JSON balasan dari RajaOngkir
      */
-    public function waybill($waybill_number, $courier)
+    public static function waybill($waybill_number, $courier)
     {
         $params = array(
             'waybill' => $waybill_number,
             'courier' => $courier,
         );
-        $rest_client = new RESTClient($this->api_key, 'waybill', $this->account_type);
+        $rest_client = new RESTClient(self::$api_key, 'waybill', self::$account_type);
         return $rest_client->post($params);
     }
 

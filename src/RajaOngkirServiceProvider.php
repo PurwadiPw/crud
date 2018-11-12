@@ -3,6 +3,7 @@
 namespace Pw\RajaOngkir;
 
 use Illuminate\Support\ServiceProvider;
+use Pw\RajaOngkir\RajaOngkir;
 
 /**
  * @see \Pw\RajaOngkir\RajaOngkirServiceProvider
@@ -13,6 +14,16 @@ use Illuminate\Support\ServiceProvider;
 class RajaOngkirServiceProvider extends ServiceProvider
 {
     /**
+     * Indicates if loading of the provider is deferred
+     */
+    protected $defer = true;
+
+    /**
+     * Config path of rajaongkir packages
+     */
+    private $config_path = __DIR__ . '/../config/rajaongkir.php';
+
+    /**
      * Bootstrap the application services.
      *
      * @return void
@@ -20,8 +31,8 @@ class RajaOngkirServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__ . '/config/rajaongkir.php' => config_path() . '/rajaongkir.php',
-        ]);
+            $this->config_path => config_path('rajaongkir.php'),
+        ], 'lara-ongkir');
     }
 
     /**
@@ -31,16 +42,26 @@ class RajaOngkirServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->mergeConfigFrom($this->config_path, 'rajaongkir');
         $this->registerRajaOngkir();
 
-        $this->app->alias('RajaOngkir', 'Pw\RajaOngkir\Endpoints');
+        // $this->app->alias('RajaOngkir', 'Pw\RajaOngkir\RajaOngkir');
     }
 
     public function registerRajaOngkir()
     {
-        $this->app->singleton('RajaOngkir', function () {
-            return new Endpoints(config('rajaongkir.api_key'), config('rajaongkir.account_type'));
+        $this->app->singleton('RajaOngkir', function ($app) {
+            return new RajaOngkir($this->app['config']['rajaongkir.api_key'], $this->app['config']['rajaongkir.account_type']);
         });
+    }
+
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return array
+     */
+    public function provides()
+    {
+        return ['RajaOngkir'];
     }
 }
